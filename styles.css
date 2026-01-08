@@ -1,0 +1,470 @@
+/* Breathe App - Stylesheet
+ * Design: Minimalismo Meditativo com Geometria Orgânica
+ * Tipografia: Playfair Display (títulos) + Inter (corpo)
+ * Cores: Gradiente azul-branco com acentos em azul muted
+ */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    width: 100%;
+    height: 100%;
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: linear-gradient(135deg, #E0F2FE 0%, #F8FAFB 50%, #E0ECFF 100%);
+    color: #2D3E50;
+    line-height: 1.6;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+}
+
+/* ============================================
+   ANIMAÇÕES
+   ============================================ */
+
+@keyframes breathe-pulse {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.15);
+        opacity: 0.9;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+@keyframes breathe-text-fade {
+    0% {
+        opacity: 0;
+    }
+    50% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+
+@keyframes wave-animation {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(100%);
+    }
+}
+
+@keyframes fade-in-up {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-breathe {
+    animation: breathe-pulse 12s ease-in-out infinite;
+}
+
+.animate-breathe-text {
+    animation: breathe-text-fade 12s ease-in-out infinite;
+}
+
+.animate-fade-in-up {
+    animation: fade-in-up 0.6s ease-out;
+}
+
+/* ============================================
+   LAYOUT PRINCIPAL
+   ============================================ */
+
+.container {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    padding: 20px;
+}
+
+.wave-background {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0.05;
+    pointer-events: none;
+}
+
+.content {
+    position: relative;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 48px;
+}
+
+/* ============================================
+   HEADER / TÍTULO
+   ============================================ */
+
+.header {
+    text-align: center;
+    animation: fade-in-up 0.6s ease-out;
+}
+
+.header h1 {
+    font-size: clamp(2.5rem, 8vw, 3.5rem);
+    color: #1e3a8a;
+    margin-bottom: 8px;
+    letter-spacing: -0.02em;
+}
+
+.header p {
+    font-size: 1.125rem;
+    color: #2563eb;
+    font-weight: 300;
+}
+
+/* ============================================
+   CÍRCULO RESPIRATÓRIO
+   ============================================ */
+
+.breathing-circle-container {
+    position: relative;
+    width: 256px;
+    height: 256px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.breathing-circle-outer {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: white;
+    box-shadow: 0 20px 60px rgba(45, 62, 80, 0.15);
+}
+
+.breathing-circle {
+    position: absolute;
+    inset: 32px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #dbeafe 0%, #f0f9ff 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.1s ease-out;
+    box-shadow: inset 0 -20px 40px rgba(0, 0, 0, 0.05), 0 10px 30px rgba(91, 141, 190, 0.2);
+}
+
+.breathing-circle.active {
+    animation: breathe-pulse 12s ease-in-out infinite;
+}
+
+.breathing-content {
+    text-align: center;
+    z-index: 2;
+}
+
+.breathing-time {
+    font-size: 2.25rem;
+    font-weight: bold;
+    color: #0ea5e9;
+    margin-bottom: 8px;
+    transition: color 0.3s ease;
+    font-family: 'Roboto Mono', 'Courier New', monospace;
+}
+
+.breathing-phase {
+    font-size: 0.875rem;
+    font-weight: 300;
+    color: #0ea5e9;
+    transition: color 0.3s ease;
+}
+
+.breathing-phase.animate {
+    animation: breathe-text-fade 12s ease-in-out infinite;
+}
+
+.breathing-phase.inspire {
+    color: #60a5fa;
+}
+
+.breathing-phase.hold {
+    color: #0ea5e9;
+}
+
+.breathing-phase.expire {
+    color: #1e40af;
+}
+
+.breathing-time.inspire {
+    color: #60a5fa;
+}
+
+.breathing-time.hold {
+    color: #0ea5e9;
+}
+
+.breathing-time.expire {
+    color: #1e40af;
+}
+
+.breathing-initial {
+    font-size: 1.875rem;
+    font-weight: bold;
+    color: #1e3a8a;
+    margin-bottom: 8px;
+}
+
+.breathing-initial-text {
+    font-size: 0.875rem;
+    font-weight: 300;
+    color: #2563eb;
+}
+
+/* ============================================
+   ANEL DE PROGRESSO
+   ============================================ */
+
+.progress-ring {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.progress-ring-circle {
+    transition: stroke-dasharray 0.1s linear;
+    stroke-linecap: round;
+}
+
+/* ============================================
+   CONTROLES DE TEMPO
+   ============================================ */
+
+.time-controls {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 12px;
+    width: 100%;
+    max-width: 448px;
+    animation: fade-in-up 0.6s ease-out;
+}
+
+.time-btn {
+    padding: 12px 8px;
+    border-radius: 8px;
+    font-weight: 500;
+    font-size: 0.875rem;
+    border: 2px solid #bfdbfe;
+    background: white;
+    color: #1e3a8a;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: 'Inter', sans-serif;
+}
+
+.time-btn:hover:not(:disabled) {
+    border-color: #60a5fa;
+    box-shadow: 0 4px 12px rgba(96, 165, 250, 0.2);
+}
+
+.time-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.time-btn.active {
+    background: #2563eb;
+    color: white;
+    border-color: #2563eb;
+    box-shadow: 0 8px 16px rgba(37, 99, 235, 0.3);
+    transform: scale(1.05);
+}
+
+/* ============================================
+   BOTÕES DE CONTROLE
+   ============================================ */
+
+.control-buttons {
+    display: flex;
+    gap: 16px;
+    animation: fade-in-up 0.6s ease-out;
+}
+
+.btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-weight: 500;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: 'Inter', sans-serif;
+    font-size: 1rem;
+}
+
+.btn-primary {
+    background: #2563eb;
+    color: white;
+    box-shadow: 0 8px 16px rgba(37, 99, 235, 0.3);
+}
+
+.btn-primary:hover {
+    background: #1d4ed8;
+    box-shadow: 0 12px 24px rgba(37, 99, 235, 0.4);
+}
+
+.btn-secondary {
+    background: white;
+    color: #1e3a8a;
+    border: 2px solid #bfdbfe;
+}
+
+.btn-secondary:hover {
+    border-color: #60a5fa;
+    box-shadow: 0 4px 12px rgba(96, 165, 250, 0.2);
+}
+
+/* ============================================
+   INFORMAÇÕES
+   ============================================ */
+
+.info-text {
+    margin-top: 32px;
+    text-align: center;
+    max-width: 448px;
+    animation: fade-in-up 0.6s ease-out;
+}
+
+.info-text p {
+    font-size: 0.875rem;
+    color: #1e40af;
+    font-weight: 300;
+    line-height: 1.6;
+}
+
+/* ============================================
+   FOOTER
+   ============================================ */
+
+.footer {
+    position: absolute;
+    bottom: 16px;
+    text-align: center;
+    font-size: 0.75rem;
+    color: #2563eb;
+    font-weight: 300;
+}
+
+/* ============================================
+   UTILITÁRIOS
+   ============================================ */
+
+.hidden {
+    display: none;
+}
+
+/* ============================================
+   RESPONSIVO
+   ============================================ */
+
+@media (max-width: 640px) {
+    .time-controls {
+        gap: 8px;
+    }
+
+    .time-btn {
+        padding: 10px 6px;
+        font-size: 0.75rem;
+    }
+
+    .breathing-circle-container {
+        width: 200px;
+        height: 200px;
+    }
+
+    .breathing-time {
+        font-size: 1.75rem;
+    }
+
+    .control-buttons {
+        flex-direction: column;
+        width: 100%;
+        max-width: 300px;
+    }
+
+    .btn {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .header h1 {
+        font-size: 2rem;
+    }
+
+    .header p {
+        font-size: 0.95rem;
+    }
+
+    .content {
+        gap: 32px;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 16px;
+    }
+
+    .breathing-circle-container {
+        width: 160px;
+        height: 160px;
+    }
+
+    .breathing-time {
+        font-size: 1.5rem;
+    }
+
+    .breathing-initial {
+        font-size: 1.5rem;
+    }
+
+    .time-controls {
+        gap: 6px;
+    }
+
+    .time-btn {
+        padding: 8px 4px;
+        font-size: 0.7rem;
+    }
+
+    .btn {
+        padding: 10px 16px;
+        font-size: 0.9rem;
+    }
+}

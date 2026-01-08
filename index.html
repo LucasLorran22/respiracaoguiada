@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Breathe - Exercício de respiração guiada e meditação. Técnica de respiração estilo smartwatch com temporizador ajustável. Reduz estresse e ansiedade.">
+    <meta name="keywords" content="respiração, meditação, exercício de respiração, mindfulness, reduzir estresse, ansiedade, bem-estar, saúde mental">
+    <meta name="author" content="Breathe App">
+    <meta name="robots" content="index, follow">
+    <meta name="language" content="Portuguese">
+    <meta property="og:title" content="Breathe - Respiração Guiada e Meditação">
+    <meta property="og:description" content="Exercício de respiração guiada inspirado em smartwatches. Reduza estresse, ansiedade e melhore seu bem-estar mental com técnicas de respiração comprovadas.">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="/og-image.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Breathe - Respiração Guiada">
+    <meta name="twitter:description" content="Exercício de respiração guiada para reduzir estresse e ansiedade.">
+    <meta name="theme-color" content="#2D3E50">
+    <title>Respiração Guiada e Meditação | Exercício de Respiração Online</title>
+    <link rel="canonical" href="https://breathe.app">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+	<link rel="icon" href="image/favicon.png" type="image/png">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #E0F2FE 0%, #F8FAFB 50%, #E0ECFF 100%);
+            color: #2D3E50;
+            line-height: 1.6;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+        }
+
+        /* Animações */
+        @keyframes breathe-pulse {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.15); opacity: 0.9; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        @keyframes breathe-text-fade {
+            0% { opacity: 0; }
+            50% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+
+        @keyframes wave-animation {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(100%); }
+        }
+
+        @keyframes fade-in-up {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .animate-breathe {
+            animation: breathe-pulse 12s ease-in-out infinite;
+        }
+
+        .animate-breathe-text {
+            animation: breathe-text-fade 12s ease-in-out infinite;
+        }
+
+        .animate-fade-in-up {
+            animation: fade-in-up 0.6s ease-out;
+        }
+
+        /* Container principal */
+        .container {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            padding: 20px;
+        }
+
+        /* Fundo com ondas SVG */
+        .wave-background {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.05;
+            pointer-events: none;
+        }
+
+        /* Conteúdo */
+        .content {
+            position: relative;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 48px;
+        }
+
+        /* Título */
+        .header {
+            text-align: center;
+            animation: fade-in-up 0.6s ease-out;
+        }
+
+        .header h1 {
+            font-size: clamp(2.5rem, 8vw, 3.5rem);
+            color: #1e3a8a;
+            margin-bottom: 8px;
+            letter-spacing: -0.02em;
+        }
+
+        .header p {
+            font-size: 1.125rem;
+            color: #2563eb;
+            font-weight: 300;
+        }
+
+        /* Círculo respiratório */
+        .breathing-circle-container {
+            position: relative;
+            width: 256px;
+            height: 256px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .breathing-circle-outer {
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            background: white;
+            box-shadow: 0 20px 60px rgba(45, 62, 80, 0.15);
+        }
+
+        .breathing-circle {
+            position: absolute;
+            inset: 32px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #dbeafe 0%, #f0f9ff 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.1s ease-out;
+            box-shadow: inset 0 -20px 40px rgba(0, 0, 0, 0.05), 0 10px 30px rgba(91, 141, 190, 0.2);
+        }
+
+        .breathing-circle.active {
+            animation: breathe-pulse 12s ease-in-out infinite;
+        }
+
+        .breathing-content {
+            text-align: center;
+            z-index: 2;
+        }
+
+        .breathing-time {
+            font-size: 2.25rem;
+            font-weight: bold;
+            color: #0ea5e9;
+            margin-bottom: 8px;
+            transition: color 0.3s ease;
+            font-family: 'Roboto Mono', monospace;
+        }
+
+        .breathing-phase {
+            font-size: 0.875rem;
+            font-weight: 300;
+            color: #0ea5e9;
+            transition: color 0.3s ease;
+        }
+
+        .breathing-phase.animate {
+            animation: breathe-text-fade 12s ease-in-out infinite;
+        }
+
+        .breathing-phase.inspire { color: #60a5fa; }
+        .breathing-phase.hold { color: #0ea5e9; }
+        .breathing-phase.expire { color: #1e40af; }
+
+        .breathing-time.inspire { color: #60a5fa; }
+        .breathing-time.hold { color: #0ea5e9; }
+        .breathing-time.expire { color: #1e40af; }
+
+        .breathing-initial {
+            font-size: 1.875rem;
+            font-weight: bold;
+            color: #1e3a8a;
+            margin-bottom: 8px;
+        }
+
+        .breathing-initial-text {
+            font-size: 0.875rem;
+            font-weight: 300;
+            color: #2563eb;
+        }
+
+        /* SVG de progresso */
+        .progress-ring {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .progress-ring-circle {
+            transition: stroke-dasharray 0.1s linear;
+            stroke-linecap: round;
+        }
+
+        /* Controles de tempo */
+        .time-controls {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 12px;
+            width: 100%;
+            max-width: 448px;
+            animation: fade-in-up 0.6s ease-out;
+        }
+
+        .time-btn {
+            padding: 12px 8px;
+            border-radius: 8px;
+            font-weight: 500;
+            font-size: 0.875rem;
+            border: 2px solid #bfdbfe;
+            background: white;
+            color: #1e3a8a;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .time-btn:hover:not(:disabled) {
+            border-color: #60a5fa;
+            box-shadow: 0 4px 12px rgba(96, 165, 250, 0.2);
+        }
+
+        .time-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .time-btn.active {
+            background: #2563eb;
+            color: white;
+            border-color: #2563eb;
+            box-shadow: 0 8px 16px rgba(37, 99, 235, 0.3);
+            transform: scale(1.05);
+        }
+
+        /* Botões de controle */
+        .control-buttons {
+            display: flex;
+            gap: 16px;
+            animation: fade-in-up 0.6s ease-out;
+        }
+
+        .btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 500;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+        }
+
+        .btn-primary {
+            background: #2563eb;
+            color: white;
+            box-shadow: 0 8px 16px rgba(37, 99, 235, 0.3);
+        }
+
+        .btn-primary:hover {
+            background: #1d4ed8;
+            box-shadow: 0 12px 24px rgba(37, 99, 235, 0.4);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #1e3a8a;
+            border: 2px solid #bfdbfe;
+        }
+
+        .btn-secondary:hover {
+            border-color: #60a5fa;
+            box-shadow: 0 4px 12px rgba(96, 165, 250, 0.2);
+        }
+
+        /* Informações */
+        .info-text {
+            margin-top: 32px;
+            text-align: center;
+            max-width: 448px;
+            animation: fade-in-up 0.6s ease-out;
+        }
+
+        .info-text p {
+            font-size: 0.875rem;
+            color: #1e40af;
+            font-weight: 300;
+            line-height: 1.6;
+        }
+
+        /* Footer */
+        .footer {
+            position: absolute;
+            bottom: 16px;
+            text-align: center;
+            font-size: 0.75rem;
+            color: #2563eb;
+            font-weight: 300;
+        }
+
+        /* Responsivo */
+        @media (max-width: 640px) {
+            .time-controls {
+                gap: 8px;
+            }
+
+            .time-btn {
+                padding: 10px 6px;
+                font-size: 0.75rem;
+            }
+
+            .breathing-circle-container {
+                width: 200px;
+                height: 200px;
+            }
+
+            .breathing-time {
+                font-size: 1.75rem;
+            }
+
+            .control-buttons {
+                flex-direction: column;
+                width: 100%;
+                max-width: 300px;
+            }
+
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        /* Hidden */
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Fundo com ondas -->
+        <svg class="wave-background" viewBox="0 0 1200 600" preserveAspectRatio="none">
+            <defs>
+                <pattern id="wave" x="0" y="0" width="120" height="40" patternUnits="userSpaceOnUse">
+                    <path d="M0,20 Q30,0 60,20 T120,20" stroke="#2D3E50" stroke-width="2" fill="none"/>
+                </pattern>
+            </defs>
+            <rect width="1200" height="600" fill="url(#wave)"/>
+        </svg>
+
+        <!-- Conteúdo principal -->
+        <div class="content">
+            <!-- Título 
+            <div class="header">
+                <h1>Breathe</h1>
+                <p>Respire e encontre paz</p>
+            </div>
+			-->
+			
+            <!-- Círculo respiratório -->
+            <div class="breathing-circle-container">
+                <div class="breathing-circle-outer"></div>
+                <div class="breathing-circle" id="breathingCircle">
+                    <div class="breathing-content">
+                        <div id="breathingInitial" class="breathing-initial">Pronto?</div>
+                        <div id="breathingInitialText" class="breathing-initial-text">Escolha um tempo</div>
+                        <div id="breathingTime" class="breathing-time hidden">00:00</div>
+                        <div id="breathingPhase" class="breathing-phase hidden">Inspire</div>
+                    </div>
+                </div>
+                <svg class="progress-ring" id="progressRing" viewBox="0 0 256 256">
+                    <circle cx="128" cy="128" r="120" fill="none" stroke="#E2E8F0" stroke-width="2"/>
+                    <circle id="progressCircle" cx="128" cy="128" r="120" fill="none" stroke="#5B8DBE" stroke-width="2" stroke-dasharray="0 754" stroke-linecap="round"/>
+                </svg>
+            </div>
+
+            <!-- Controles de tempo -->
+            <div class="time-controls" id="timeControls">
+                <button class="time-btn" data-duration="null">Indeterminado</button>
+                <button class="time-btn" data-duration="60">1 min</button>
+                <button class="time-btn" data-duration="300">5 min</button>
+                <button class="time-btn" data-duration="600">10 min</button>
+                <button class="time-btn" data-duration="900">15 min</button>
+            </div>
+
+            <!-- Botões de controle -->
+            <div class="control-buttons" id="controlButtons" style="display: none;">
+                <button class="btn btn-primary" id="pauseBtn">
+                    <span id="pauseIcon">⏸</span>
+                    <span id="pauseText">Pausar</span>
+                </button>
+                <button class="btn btn-secondary" id="resetBtn">
+                    <span>↻</span>
+                    <span>Reiniciar</span>
+                </button>
+            </div>
+
+            <!-- Informações 
+            <div class="info-text">
+                <p>A respiração profunda e controlada ajuda a reduzir o estresse, ansiedade e promove bem-estar mental. Pratique regularmente para melhores resultados.</p>
+            </div>
+			-->
+        </div>
+
+        <!-- Footer SEO -->
+        <div class="footer">
+            <p>Exercício de respiração guiada • Meditação online</p>
+        </div>
+    </div>
+
+    <!-- Schema.org Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "Breathe - Respiração Guiada",
+      "description": "Exercício de respiração guiada e meditação com técnica estilo smartwatch",
+      "url": "https://breathe.app",
+      "applicationCategory": "HealthApplication",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "BRL"
+      }
+    }
+    </script>
+
+    <script>
+        // Estado da aplicação
+        let isRunning = false;
+        let selectedDuration = null;
+        let timeElapsed = 0;
+        let breathePhase = 'inspire';
+        let cycleProgress = 0;
+        let intervalId = null;
+
+        // Constantes
+        const BREATHING_CYCLE = 12000; // ms
+        const INSPIRE_DURATION = 4000;
+        const HOLD_DURATION = 2000; //4000
+        const EXPIRE_DURATION = 4000;
+
+        // Elementos DOM
+        const timeControls = document.getElementById('timeControls');
+        const controlButtons = document.getElementById('controlButtons');
+        const breathingCircle = document.getElementById('breathingCircle');
+        const breathingTime = document.getElementById('breathingTime');
+        const breathingPhase = document.getElementById('breathingPhase');
+        const breathingInitial = document.getElementById('breathingInitial');
+        const breathingInitialText = document.getElementById('breathingInitialText');
+        const progressCircle = document.getElementById('progressCircle');
+        const pauseBtn = document.getElementById('pauseBtn');
+        const resetBtn = document.getElementById('resetBtn');
+        const pauseIcon = document.getElementById('pauseIcon');
+        const pauseText = document.getElementById('pauseText');
+
+        // Funções auxiliares
+        function formatTime(ms) {
+            const totalSeconds = Math.floor(ms / 1000);
+            const minutes = Math.floor(totalSeconds / 60);
+            const seconds = totalSeconds % 60;
+            return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        function getPhaseText(phase) {
+            const phases = {
+                'inspire': 'Inspire',
+                'hold': 'Segure',
+                'expire': 'Expire'
+            };
+            return phases[phase] || 'Inspire';
+        }
+
+        function updatePhaseColor(phase) {
+            breathingTime.className = `breathing-time ${phase}`;
+            breathingPhase.className = `breathing-phase animate ${phase}`;
+        }
+
+        function updateUI() {
+            breathingTime.textContent = formatTime(timeElapsed);
+            breathingPhase.textContent = getPhaseText(breathePhase);
+            updatePhaseColor(breathePhase);
+
+            // Atualizar anel de progresso
+            const circumference = 2 * Math.PI * 120;
+            const offset = circumference - (cycleProgress / 100) * circumference;
+            progressCircle.style.strokeDasharray = `${circumference - offset} ${circumference}`;
+        }
+
+        function startBreathing(duration) {
+            selectedDuration = duration;
+            isRunning = true;
+            timeElapsed = 0;
+            breathePhase = 'inspire';
+            cycleProgress = 0;
+
+            // Atualizar UI
+            breathingInitial.classList.add('hidden');
+            breathingInitialText.classList.add('hidden');
+            breathingTime.classList.remove('hidden');
+            breathingPhase.classList.remove('hidden');
+            controlButtons.style.display = 'flex';
+            breathingCircle.classList.add('active');
+
+            // Desabilitar botões de tempo
+            document.querySelectorAll('.time-btn').forEach(btn => {
+                btn.disabled = true;
+                btn.classList.remove('active');
+            });
+            document.querySelector(`[data-duration="${duration}"]`).classList.add('active');
+
+            // Iniciar loop de respiração
+            clearInterval(intervalId);
+            intervalId = setInterval(() => {
+                timeElapsed += 100;
+
+                // Verificar se atingiu o tempo máximo
+                if (selectedDuration && timeElapsed >= selectedDuration * 1000) {
+                    pauseBreathing();
+                    return;
+                }
+
+                // Calcular fase da respiração
+                const cycleTime = timeElapsed % BREATHING_CYCLE;
+                cycleProgress = (cycleTime / BREATHING_CYCLE) * 100;
+
+                if (cycleTime < INSPIRE_DURATION) {
+                    breathePhase = 'inspire';
+                } else if (cycleTime < INSPIRE_DURATION + HOLD_DURATION) {
+                    breathePhase = 'hold';
+                } else {
+                    breathePhase = 'expire';
+                }
+
+                updateUI();
+            }, 100);
+        }
+
+        function pauseBreathing() {
+            isRunning = !isRunning;
+            if (isRunning) {
+                pauseIcon.textContent = '⏸';
+                pauseText.textContent = 'Pausar';
+                breathingCircle.classList.add('active');
+                startBreathing(selectedDuration);
+            } else {
+                pauseIcon.textContent = '▶';
+                pauseText.textContent = 'Retomar';
+                breathingCircle.classList.remove('active');
+                clearInterval(intervalId);
+            }
+        }
+
+        function resetBreathing() {
+            isRunning = false;
+            selectedDuration = null;
+            timeElapsed = 0;
+            breathePhase = 'inspire';
+            cycleProgress = 0;
+            clearInterval(intervalId);
+
+            // Atualizar UI
+            breathingInitial.classList.remove('hidden');
+            breathingInitialText.classList.remove('hidden');
+            breathingTime.classList.add('hidden');
+            breathingPhase.classList.add('hidden');
+            controlButtons.style.display = 'none';
+            breathingCircle.classList.remove('active');
+
+            // Habilitar botões de tempo
+            document.querySelectorAll('.time-btn').forEach(btn => {
+                btn.disabled = false;
+                btn.classList.remove('active');
+            });
+
+            // Resetar anel de progresso
+            progressCircle.style.strokeDasharray = '0 754';
+
+            // Resetar ícone de pausa
+            pauseIcon.textContent = '⏸';
+            pauseText.textContent = 'Pausar';
+        }
+
+        // Event listeners
+        document.querySelectorAll('.time-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const duration = btn.dataset.duration === 'null' ? null : parseInt(btn.dataset.duration);
+                startBreathing(duration);
+            });
+        });
+
+        pauseBtn.addEventListener('click', pauseBreathing);
+        resetBtn.addEventListener('click', resetBreathing);
+
+        // Inicializar
+        resetBreathing();
+    </script>
+</body>
+</html>
